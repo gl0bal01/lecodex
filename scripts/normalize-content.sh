@@ -16,9 +16,16 @@ fi
 # some [[intel-codex/X]] links were authored. In Quartz (single-instance, baseUrl=/),
 # those produce /intel-codex/X 404s. Strip prefix; Quartz markdownLinkResolution:shortest
 # resolves the leaf filename regardless of folder.
+#
+# Also strip leading ../ and ./ from wikilink targets — these are markdown-link syntax,
+# not Obsidian wikilink syntax. Quartz misresolves [[../../Security/Analysis/sop-X]]
+# to /Analysis/sop-X (drops one segment per .. instead of resolving relative path).
+# Stripping the .. and letting Quartz resolve by absolute vault path works.
 find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 sed -i -E \
   -e 's/\[\[intel-codex\//[[/g' \
-  -e 's/\]\(intel-codex\//](/g'
+  -e 's/\]\(intel-codex\//](/g' \
+  -e 's/\[\[(\.\.\/)+/[[/g' \
+  -e 's/\[\[\.\//[[/g'
 
 # Find markdown files containing ::: admonitions, transform line-by-line.
 find "$CONTENT_DIR" -type f -name '*.md' -print0 | while IFS= read -r -d '' f; do
