@@ -13,7 +13,9 @@ COPY . .
 RUN ./scripts/normalize-content.sh && \
     npx quartz build && \
     printf 'User-agent: *\nAllow: /\n\nSitemap: https://lecodex.xyz/sitemap.xml\n' > public/robots.txt && \
-    printf 'gl0bal01 / Le Codex — https://lecodex.xyz\n' > public/humans.txt
+    printf 'gl0bal01 / Le Codex — https://lecodex.xyz\n' > public/humans.txt && \
+    LD='<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Le Codex","url":"https://lecodex.xyz","description":"OSINT investigation techniques, security procedures, real-world case studies.","inLanguage":"en-US","publisher":{"@type":"Person","name":"gl0bal01","url":"https://gl0bal01.com"},"potentialAction":{"@type":"SearchAction","target":"https://lecodex.xyz/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>' && \
+    find public -type f -name '*.html' -print0 | xargs -0 sed -i "s|</head>|${LD}</head>|"
 
 FROM nginx:1.27-alpine AS runtime
 RUN rm -rf /usr/share/nginx/html/*

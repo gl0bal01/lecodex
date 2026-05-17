@@ -34,6 +34,11 @@ find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 sed -i -E \
 # (404) instead of /Investigations/Techniques/sop-X.
 find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 perl -i -pe 's/\[\[[^\]\|]*\/([^\]\|\/]+)(\|[^\]]*)?\]\]/[[$1$2]]/g'
 
+# Convert bare markdown links [text](bare-name) -> [[bare-name|text]] so Quartz
+# shortest resolves them. Only matches identifier-shaped targets with no slash,
+# dot, hash, colon, or whitespace (avoids URLs, anchors, file refs, code).
+find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 perl -i -pe 's/\[([^\]]+)\]\(([A-Za-z][A-Za-z0-9_-]*)\)/[[$2|$1]]/g'
+
 # Find markdown files containing ::: admonitions, transform line-by-line.
 find "$CONTENT_DIR" -type f -name '*.md' -print0 | while IFS= read -r -d '' f; do
   if ! grep -qE '^:::' "$f"; then

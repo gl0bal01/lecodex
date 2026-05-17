@@ -19,7 +19,6 @@ const config: QuartzConfig = {
       ".omc",
       "Case-Template",
       "Student-Exercises",
-      "Cases",
       "CLAUDE.md",
       "CONTRIBUTING.md",
     ],
