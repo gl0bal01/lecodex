@@ -1,3 +1,267 @@
 @use "./base.scss";
+@use "./variables.scss" as *;
 
-// put your custom CSS here!
+/* ============================================================
+   lecodex polish — tighter, sharper, pro
+   ============================================================ */
+
+/* --- Sidebar: stick to top, kill the gap --- */
+.sidebar {
+  padding: 1rem 1.5rem 2rem 1.5rem !important;
+  gap: 1rem !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--lightgray) transparent;
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: var(--lightgray); border-radius: 3px; }
+}
+
+.sidebar.left {
+  overflow-y: auto;
+  padding-top: 0.5rem !important;
+
+  @media all and not ($mobile) {
+    top: 0 !important;
+    height: 100vh !important;
+  }
+}
+
+.sidebar.right {
+  padding-top: 0.5rem !important;
+  overflow-y: auto;
+}
+
+/* Tighter sidebar typography */
+.page-title {
+  margin: 0.25rem 0 0.5rem !important;
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  & a { color: var(--dark); }
+}
+
+/* --- Page header: kill big top margin --- */
+.page-header {
+  margin-top: 1rem !important;
+}
+
+article {
+  & h1, & h2, & h3, & h4, & h5, & h6 {
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+
+  & h1 { font-size: 2.25rem; font-weight: 800; margin: 1.5rem 0 1rem; }
+  & h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 2rem 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--lightgray);
+  }
+  & h3 { font-size: 1.25rem; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+  & h4 { font-size: 1.05rem; font-weight: 600; margin: 1.25rem 0 0.4rem; color: var(--secondary); }
+
+  & p, & li { line-height: 1.65; }
+
+  & a {
+    color: var(--secondary);
+    text-decoration: none;
+    background-image: linear-gradient(var(--tertiary), var(--tertiary));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0 1px;
+    transition: background-size 200ms ease, color 120ms ease;
+    &:hover {
+      background-size: 100% 1px;
+      color: var(--tertiary);
+    }
+  }
+}
+
+/* --- Inline code: refined --- */
+:not(pre) > code {
+  font-family: var(--codeFont);
+  background: color-mix(in srgb, var(--secondary) 8%, transparent);
+  color: var(--secondary);
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.88em;
+  border: 1px solid color-mix(in srgb, var(--secondary) 12%, transparent);
+}
+
+/* --- Code blocks: rounded, subtle border + shadow --- */
+pre {
+  border-radius: 8px !important;
+  border: 1px solid var(--lightgray);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 1rem !important;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  overflow-x: auto;
+}
+
+/* --- Tables: pro-looking --- */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.93rem;
+  margin: 1rem 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--lightgray);
+
+  & th {
+    background: color-mix(in srgb, var(--secondary) 6%, transparent);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.6rem 0.85rem;
+    border-bottom: 1px solid var(--lightgray);
+    color: var(--secondary);
+  }
+  & td {
+    padding: 0.55rem 0.85rem;
+    border-bottom: 1px solid var(--lightgray);
+    vertical-align: top;
+  }
+  & tr:last-child td { border-bottom: none; }
+  & tr:hover td { background: color-mix(in srgb, var(--highlight) 60%, transparent); }
+}
+
+/* --- Callouts: tighter, more refined --- */
+.callout {
+  border-radius: 8px !important;
+  border-left-width: 4px !important;
+  padding: 0.85rem 1rem !important;
+  margin: 1rem 0 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+/* --- Article title --- */
+.article-title {
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.1 !important;
+  margin: 0 0 0.75rem !important;
+}
+
+/* --- Content meta (date row) --- */
+.content-meta {
+  color: color-mix(in srgb, var(--darkgray) 60%, transparent);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+/* --- Tag pills --- */
+.tags > a {
+  background: color-mix(in srgb, var(--secondary) 10%, transparent);
+  color: var(--secondary);
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid color-mix(in srgb, var(--secondary) 15%, transparent);
+  transition: all 120ms ease;
+  &:hover {
+    background: var(--secondary);
+    color: var(--light);
+  }
+}
+
+/* --- Search input --- */
+#search-bar {
+  border-radius: 6px !important;
+  border: 1px solid var(--lightgray) !important;
+  background: var(--light) !important;
+  &:focus {
+    border-color: var(--secondary) !important;
+    outline: none;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--secondary) 15%, transparent);
+  }
+}
+
+/* --- Backlinks panel --- */
+.backlinks ul li {
+  font-size: 0.88rem;
+  & a { opacity: 0.85; }
+}
+
+/* --- TOC: subtle active marker --- */
+.toc-content {
+  font-size: 0.85rem;
+  & li > a {
+    color: color-mix(in srgb, var(--darkgray) 70%, transparent);
+    padding: 0.15rem 0 0.15rem 0.6rem;
+    border-left: 2px solid transparent;
+    display: block;
+    transition: all 120ms ease;
+    &:hover { color: var(--secondary); }
+    &.in-view {
+      color: var(--secondary);
+      border-left-color: var(--secondary);
+      font-weight: 600;
+    }
+  }
+}
+
+/* --- Footer: refined --- */
+footer {
+  border-top: 1px solid var(--lightgray);
+  padding-top: 1rem;
+  margin-top: 3rem;
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--darkgray) 70%, transparent);
+  text-align: center;
+  & ul {
+    display: inline-flex;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 0;
+  }
+  & p { margin: 0.25rem 0; }
+}
+
+/* --- Breadcrumbs --- */
+.breadcrumb-container {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-bottom: 0.75rem;
+}
+
+html { scroll-padding-top: 1rem; }
+
+::selection {
+  background: color-mix(in srgb, var(--secondary) 80%, transparent);
+  color: var(--light);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--lightgray);
+  margin: 2rem 0;
+}
+
+blockquote {
+  border-left: 3px solid var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 4%, transparent);
+  padding: 0.75rem 1rem;
+  border-radius: 0 6px 6px 0;
+  margin: 1rem 0;
+  font-style: italic;
+}
+
+article img {
+  border-radius: 6px;
+  border: 1px solid var(--lightgray);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  height: auto;
+}
+
+.graph-outer {
+  border-radius: 8px;
+  border: 1px solid var(--lightgray);
+  overflow: hidden;
+}
