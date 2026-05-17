@@ -27,6 +27,13 @@ find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 sed -i -E \
   -e 's/\[\[(\.\.\/)+/[[/g' \
   -e 's/\[\[\.\//[[/g'
 
+# Strip folder prefixes from wikilink targets — basenames are unique across
+# non-excluded vault content (verified). [[Folder/Sub/file|alias]] -> [[file|alias]].
+# Quartz markdownLinkResolution:shortest then resolves to actual location.
+# Without this, [[Techniques/sop-X]] resolves as vault-absolute /Techniques/sop-X
+# (404) instead of /Investigations/Techniques/sop-X.
+find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 perl -i -pe 's/\[\[[^\]\|]*\/([^\]\|\/]+)(\|[^\]]*)?\]\]/[[$1$2]]/g'
+
 # Find markdown files containing ::: admonitions, transform line-by-line.
 find "$CONTENT_DIR" -type f -name '*.md' -print0 | while IFS= read -r -d '' f; do
   if ! grep -qE '^:::' "$f"; then
