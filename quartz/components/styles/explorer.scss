@@ -130,10 +130,24 @@ button.desktop-explorer {
       color: var(--dark);
       opacity: 0.75;
       pointer-events: all;
+      display: block;
+      padding: 2px 8px;
+      margin: 1px 0;
+      border-left: 2px solid transparent;
+      border-radius: 0 4px 4px 0;
+      transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, opacity 120ms ease;
+
+      &:hover {
+        opacity: 1;
+        background-color: var(--highlight);
+      }
 
       &.active {
         opacity: 1;
-        color: var(--tertiary);
+        color: var(--secondary);
+        background-color: var(--highlight);
+        border-left-color: var(--secondary);
+        font-weight: $semiBoldWeight;
       }
     }
   }

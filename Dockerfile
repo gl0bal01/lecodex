@@ -11,7 +11,9 @@ COPY . .
 # content/ is expected to be populated by CI (actions/checkout of intel-codex into ./content)
 # Local builds can: git clone --depth=1 https://github.com/gl0bal01/intel-codex.git content
 RUN ./scripts/normalize-content.sh && \
-    npx quartz build
+    npx quartz build && \
+    printf 'User-agent: *\nAllow: /\n\nSitemap: https://lecodex.xyz/sitemap.xml\n' > public/robots.txt && \
+    printf 'gl0bal01 / Le Codex — https://lecodex.xyz\n' > public/humans.txt
 
 FROM nginx:1.27-alpine AS runtime
 RUN rm -rf /usr/share/nginx/html/*

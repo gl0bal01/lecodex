@@ -1,10 +1,17 @@
 import { i18n } from "../i18n"
-import { FullSlug, getFileExtension, joinSegments, pathToRoot } from "../util/path"
+import { FullSlug, joinSegments, pathToRoot } from "../util/path"
 import { CSSResourceToStyleElement, JSResourceToScriptElement } from "../util/resources"
 import { googleFontHref, googleFontSubsetHref } from "../util/theme"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { unescapeHTML } from "../util/escape"
 import { CustomOgImagesEmitterName } from "../plugins/emitters/ogImage"
+
+// lecodex SEO additions: canonical, manifest, theme-color, twitter:site/creator,
+// og:url fix for homepage, og:image:type fix.
+const TWITTER_HANDLE = "@gl0bal01"
+const THEME_COLOR_LIGHT = "#faf8f8"
+const THEME_COLOR_DARK = "#0f0f10"
+
 export default (() => {
   const Head: QuartzComponent = ({
     cfg,
@@ -26,15 +33,22 @@ export default (() => {
     const path = url.pathname as FullSlug
     const baseDir = fileData.slug === "404" ? path : pathToRoot(fileData.slug!)
     const iconPath = joinSegments(baseDir, "static/icon.png")
+    const manifestPath = joinSegments(baseDir, "static/manifest.json")
 
-    // Url of current page
-    const socialUrl =
-      fileData.slug === "404" ? url.toString() : joinSegments(url.toString(), fileData.slug!)
+    // Fix homepage url: Quartz appends "/index"; canonical should be "/" for homepage.
+    const isHome = fileData.slug === "index"
+    const socialUrl = isHome
+      ? url.toString()
+      : fileData.slug === "404"
+        ? url.toString()
+        : joinSegments(url.toString(), fileData.slug!)
+    const canonicalUrl = socialUrl.endsWith("/") ? socialUrl : socialUrl + "/"
 
     const usesCustomOgImage = ctx.cfg.plugins.emitters.some(
       (e) => e.name === CustomOgImagesEmitterName,
     )
     const ogImageDefaultPath = `https://${cfg.baseUrl}/static/og-image.png`
+    const robotsContent = fileData.frontmatter?.noindex ? "noindex, nofollow" : "index, follow"
 
     return (
       <head>
@@ -52,33 +66,45 @@ export default (() => {
         )}
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="robots" content={robotsContent} />
+        <meta name="author" content="gl0bal01" />
+        <link rel="canonical" href={canonicalUrl} />
+        <link rel="manifest" href={manifestPath} />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content={THEME_COLOR_LIGHT} />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content={THEME_COLOR_DARK} />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content={cfg.pageTitle} />
+        <link rel="apple-touch-icon" href={iconPath} />
 
-        <meta name="og:site_name" content={cfg.pageTitle}></meta>
+        <meta property="og:site_name" content={cfg.pageTitle} />
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
+        <meta property="og:locale" content={cfg.locale?.replace("-", "_") ?? "en_US"} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content={TWITTER_HANDLE} />
+        <meta name="twitter:creator" content={TWITTER_HANDLE} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta property="og:description" content={description} />
         <meta property="og:image:alt" content={description} />
+        <meta name="twitter:image:alt" content={description} />
 
         {!usesCustomOgImage && (
           <>
             <meta property="og:image" content={ogImageDefaultPath} />
             <meta property="og:image:url" content={ogImageDefaultPath} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
             <meta name="twitter:image" content={ogImageDefaultPath} />
-            <meta
-              property="og:image:type"
-              content={`image/${getFileExtension(ogImageDefaultPath) ?? "png"}`}
-            />
+            <meta property="og:image:type" content="image/png" />
           </>
         )}
 
         {cfg.baseUrl && (
           <>
-            <meta property="twitter:domain" content={cfg.baseUrl}></meta>
-            <meta property="og:url" content={socialUrl}></meta>
-            <meta property="twitter:url" content={socialUrl}></meta>
+            <meta property="twitter:domain" content={cfg.baseUrl} />
+            <meta property="og:url" content={canonicalUrl} />
+            <meta property="twitter:url" content={canonicalUrl} />
           </>
         )}
 

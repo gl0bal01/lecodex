@@ -11,6 +11,15 @@ if [ ! -d "$CONTENT_DIR" ]; then
   exit 1
 fi
 
+# Strip vestigial "intel-codex/" prefix from wikilinks + markdown links.
+# Origin: vault was previously consumed by Docusaurus mounted at /intel-codex/, so
+# some [[intel-codex/X]] links were authored. In Quartz (single-instance, baseUrl=/),
+# those produce /intel-codex/X 404s. Strip prefix; Quartz markdownLinkResolution:shortest
+# resolves the leaf filename regardless of folder.
+find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 sed -i -E \
+  -e 's/\[\[intel-codex\//[[/g' \
+  -e 's/\]\(intel-codex\//](/g'
+
 # Find markdown files containing ::: admonitions, transform line-by-line.
 find "$CONTENT_DIR" -type f -name '*.md' -print0 | while IFS= read -r -d '' f; do
   if ! grep -qE '^:::' "$f"; then
