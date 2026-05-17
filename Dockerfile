@@ -1,7 +1,7 @@
-FROM node:22-alpine AS builder
+FROM node:22-slim AS builder
 WORKDIR /app
 
-RUN apk add --no-cache git bash
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json* ./
 RUN npm ci
@@ -14,8 +14,7 @@ RUN ./scripts/normalize-content.sh && \
     npx quartz build
 
 FROM nginx:1.27-alpine AS runtime
-RUN apk add --no-cache brotli && \
-    rm -rf /usr/share/nginx/html/*
+RUN rm -rf /usr/share/nginx/html/*
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/public /usr/share/nginx/html
