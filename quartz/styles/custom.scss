@@ -313,3 +313,53 @@ article img {
   border: 1px solid var(--lightgray);
   overflow: hidden;
 }
+
+/* --- Mobile sidebar layout: title row + full-width search row --- */
+@media all and (max-width: 800px) {
+  .sidebar.left {
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.5rem 0.75rem !important;
+    padding: 0.6rem 1rem 0.75rem !important;
+    background-color: var(--light);
+
+    > .flex-component {
+      order: 1;
+      flex: 1 1 auto;
+      width: auto;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    > .explorer {
+      order: 2;
+      flex: 0 0 auto;
+      margin-left: auto;
+    }
+
+    > .search {
+      order: 3;
+      flex: 1 1 100%;
+      width: 100%;
+      max-width: none;
+    }
+    > .search > .search-button {
+      width: 100%;
+      height: 2.25rem;
+      border-radius: 6px;
+    }
+
+    .page-title {
+      font-size: 1.25rem !important;
+      margin: 0 !important;
+    }
+  }
+
+  /* Drawer must sit above article content + page-header */
+  .explorer-content {
+    z-index: 1000 !important;
+  }
+  .mobile-explorer {
+    z-index: 1001 !important;
+  }
+}

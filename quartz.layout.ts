@@ -25,18 +25,14 @@ export const defaultContentPageLayout: PageLayout = {
     Component.MobileOnly(Component.MobileTOC()),
   ],
   left: [
-    Component.PageTitle(),
-    Component.MobileOnly(Component.Spacer()),
     Component.Flex({
       components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
+        { Component: Component.PageTitle(), grow: true },
         { Component: Component.Darkmode() },
         { Component: Component.DesktopOnly(Component.ReaderMode()) },
       ],
     }),
+    Component.Search(),
     Component.Explorer(),
   ],
   right: [
@@ -49,17 +45,13 @@ export const defaultContentPageLayout: PageLayout = {
 export const defaultListPageLayout: PageLayout = {
   beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
   left: [
-    Component.PageTitle(),
-    Component.MobileOnly(Component.Spacer()),
     Component.Flex({
       components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
+        { Component: Component.PageTitle(), grow: true },
         { Component: Component.Darkmode() },
       ],
     }),
+    Component.Search(),
     Component.Explorer(),
   ],
   right: [],
