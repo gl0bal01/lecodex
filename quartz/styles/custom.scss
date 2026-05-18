@@ -181,8 +181,9 @@ table {
 }
 
 /* Hide leading H1 in article body that duplicates frontmatter title */
-article > h1:first-child {
-  display: none;
+article > h1:first-child,
+article > h1:first-of-type {
+  display: none !important;
 }
 
 /* --- Content meta (date row) --- */

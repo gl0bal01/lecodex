@@ -2,10 +2,46 @@ import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } fro
 import { classNames } from "../util/lang"
 import { i18n } from "../i18n"
 
+type TocEntry = { slug: string; text: string; depth: number }
+type TocNode = { entry: TocEntry; children: TocNode[] }
+
+function buildTree(entries: TocEntry[]): TocNode[] {
+  const roots: TocNode[] = []
+  const stack: TocNode[] = []
+  for (const e of entries) {
+    const node: TocNode = { entry: e, children: [] }
+    while (stack.length > 0 && stack[stack.length - 1].entry.depth >= e.depth) {
+      stack.pop()
+    }
+    if (stack.length === 0) {
+      roots.push(node)
+    } else {
+      stack[stack.length - 1].children.push(node)
+    }
+    stack.push(node)
+  }
+  return roots
+}
+
+function renderNodes(nodes: TocNode[]) {
+  return (
+    <ul class="mobile-toc-list">
+      {nodes.map((n) => (
+        <li key={n.entry.slug}>
+          <a href={`#${n.entry.slug}`}>{n.entry.text}</a>
+          {n.children.length > 0 && renderNodes(n.children)}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 const MobileTOC: QuartzComponent = ({ fileData, displayClass, cfg }: QuartzComponentProps) => {
   if (!fileData.toc || fileData.toc.length === 0) {
     return null
   }
+
+  const tree = buildTree(fileData.toc as TocEntry[])
 
   return (
     <details class={classNames(displayClass, "mobile-toc")}>
@@ -27,13 +63,7 @@ const MobileTOC: QuartzComponent = ({ fileData, displayClass, cfg }: QuartzCompo
           <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
       </summary>
-      <ul class="mobile-toc-content">
-        {fileData.toc.map((tocEntry) => (
-          <li key={tocEntry.slug} class={`depth-${tocEntry.depth}`}>
-            <a href={`#${tocEntry.slug}`}>{tocEntry.text}</a>
-          </li>
-        ))}
-      </ul>
+      <div class="mobile-toc-content">{renderNodes(tree)}</div>
     </details>
   )
 }
@@ -41,6 +71,8 @@ const MobileTOC: QuartzComponent = ({ fileData, displayClass, cfg }: QuartzCompo
 MobileTOC.css = `
 .mobile-toc {
   display: none;
+  width: 100%;
+  box-sizing: border-box;
   margin: 1rem 0 1.25rem;
   border: 1px solid var(--lightgray);
   border-radius: 8px;
@@ -55,7 +87,7 @@ MobileTOC.css = `
 .mobile-toc > summary {
   list-style: none;
   cursor: pointer;
-  padding: 0.65rem 0.9rem;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,6 +95,8 @@ MobileTOC.css = `
   font-weight: 600;
   color: var(--dark);
   user-select: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 .mobile-toc > summary::-webkit-details-marker {
   display: none;
@@ -76,31 +110,34 @@ MobileTOC.css = `
   transform: rotate(180deg);
 }
 .mobile-toc-content {
+  padding: 0.25rem 1rem 0.85rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.mobile-toc-content .mobile-toc-list {
   list-style: none;
   margin: 0;
-  padding: 0.25rem 0.9rem 0.85rem;
-  font-size: 0.9rem;
+  padding: 0;
+  font-size: 0.92rem;
 }
-.mobile-toc-content > li {
-  margin: 0.25rem 0;
+.mobile-toc-content .mobile-toc-list .mobile-toc-list {
+  padding-left: 1rem;
+  margin-top: 0.2rem;
+  border-left: 1px solid var(--lightgray);
 }
-.mobile-toc-content > li > a {
+.mobile-toc-content li {
+  margin: 0.3rem 0;
+  line-height: 1.4;
+}
+.mobile-toc-content li > a {
   color: var(--darkgray);
   background: none;
   padding: 0;
   display: inline-block;
-  line-height: 1.4;
 }
-.mobile-toc-content > li > a:hover {
+.mobile-toc-content li > a:hover {
   color: var(--secondary);
 }
-.mobile-toc-content .depth-0 { padding-left: 0; }
-.mobile-toc-content .depth-1 { padding-left: 0.75rem; }
-.mobile-toc-content .depth-2 { padding-left: 1.5rem; }
-.mobile-toc-content .depth-3 { padding-left: 2.25rem; }
-.mobile-toc-content .depth-4 { padding-left: 3rem; }
-.mobile-toc-content .depth-5 { padding-left: 3.75rem; }
-.mobile-toc-content .depth-6 { padding-left: 4.5rem; }
 `
 
 export default (() => MobileTOC) satisfies QuartzComponentConstructor
