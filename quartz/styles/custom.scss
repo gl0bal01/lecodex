@@ -180,6 +180,11 @@ table {
   margin: 0 0 0.75rem !important;
 }
 
+/* Hide leading H1 in article body that duplicates frontmatter title */
+article > h1:first-child {
+  display: none;
+}
+
 /* --- Content meta (date row) --- */
 .content-meta {
   color: color-mix(in srgb, var(--darkgray) 60%, transparent);
