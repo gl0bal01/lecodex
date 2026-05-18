@@ -135,7 +135,11 @@ button.desktop-explorer {
       margin: 1px 0;
       border-left: 2px solid transparent;
       border-radius: 0 4px 4px 0;
-      transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease, opacity 120ms ease;
+      transition:
+        background-color 120ms ease,
+        border-color 120ms ease,
+        color 120ms ease,
+        opacity 120ms ease;
 
       &:hover {
         opacity: 1;

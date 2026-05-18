@@ -222,7 +222,7 @@ document.addEventListener("nav", async () => {
     const darkMode = document.documentElement.getAttribute("saved-theme") === "dark"
     mermaid.initialize({
       startOnLoad: false,
-      securityLevel: "loose",
+      securityLevel: "strict",
       theme: darkMode ? "dark" : "base",
       themeVariables: {
         fontFamily: computedStyleMap["--codeFont"],

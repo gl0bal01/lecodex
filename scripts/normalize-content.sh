@@ -40,6 +40,12 @@ find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 perl -i -pe 's/\[\[[
 find "$CONTENT_DIR" -type f -name '*.md' -print0 | xargs -0 perl -i -pe 's/\[([^\]]+)\]\(([A-Za-z][A-Za-z0-9_-]*)\)/[[$2|$1]]/g'
 
 # Find markdown files containing ::: admonitions, transform line-by-line.
+# Clean up half-written .tmp files if the script is interrupted mid-transform.
+cleanup_tmp() {
+  find "$CONTENT_DIR" -type f -name '*.md.tmp' -delete 2>/dev/null || true
+}
+trap cleanup_tmp EXIT INT TERM
+
 find "$CONTENT_DIR" -type f -name '*.md' -print0 | while IFS= read -r -d '' f; do
   if ! grep -qE '^:::' "$f"; then
     continue

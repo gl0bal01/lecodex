@@ -29,6 +29,25 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check types and formatting
+        run: npm run check
+
+      - name: Run tests
+        run: npm test
+
+      - name: Audit dependencies
+        run: npm audit --omit=dev --audit-level=high
+        continue-on-error: true
+
       - name: Checkout intel-codex content
         uses: actions/checkout@v6
         with:
@@ -38,7 +57,10 @@ jobs:
 
       - name: Clean non-content paths from vault checkout
         run: |
-          rm -rf content/.git content/.github content/.claude content/.omc content/.obsidian \
+          # .git must be removed so it doesn't ship in the image; fail loudly if it can't.
+          rm -rf content/.git
+          # Optional cleanups — || true for paths that may not exist in every vault.
+          rm -rf content/.github content/.claude content/.omc content/.obsidian \
                  content/README.md content/CONTRIBUTING.md content/LICENSE content/CLAUDE.md \
                  content/Cases/Case-Template content/Cases/Student-Exercises || true
 

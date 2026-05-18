@@ -23,7 +23,6 @@ const config: QuartzConfig = {
       "CONTRIBUTING.md",
     ],
     defaultDateType: "modified",
-    generateSocialImages: false,
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,

@@ -70,7 +70,11 @@ export default (() => {
         <meta name="author" content="gl0bal01" />
         <link rel="canonical" href={canonicalUrl} />
         <link rel="manifest" href={manifestPath} />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content={THEME_COLOR_LIGHT} />
+        <meta
+          name="theme-color"
+          media="(prefers-color-scheme: light)"
+          content={THEME_COLOR_LIGHT}
+        />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content={THEME_COLOR_DARK} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content={cfg.pageTitle} />

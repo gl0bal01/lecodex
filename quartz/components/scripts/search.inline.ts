@@ -2,6 +2,8 @@ import FlexSearch, { DefaultDocumentSearchResults } from "flexsearch"
 import { ContentDetails } from "../../plugins/emitters/contentIndex"
 import { registerEscapeHandler, removeAllChildren } from "./util"
 import { FullSlug, normalizeRelativeURLs, resolveRelative } from "../../util/path"
+import { encoder, escapeRegex } from "../../util/searchEncoder"
+import { escapeHTML } from "../../util/escape"
 
 interface Item {
   id: number
@@ -16,50 +18,6 @@ interface Item {
 type SearchType = "basic" | "tags"
 let searchType: SearchType = "basic"
 let currentSearchTerm: string = ""
-const encoder = (str: string): string[] => {
-  const tokens: string[] = []
-  let bufferStart = -1
-  let bufferEnd = -1
-  const lower = str.toLowerCase()
-
-  let i = 0
-  for (const char of lower) {
-    const code = char.codePointAt(0)!
-
-    const isCJK =
-      (code >= 0x3040 && code <= 0x309f) ||
-      (code >= 0x30a0 && code <= 0x30ff) ||
-      (code >= 0x4e00 && code <= 0x9fff) ||
-      (code >= 0xac00 && code <= 0xd7af) ||
-      (code >= 0x20000 && code <= 0x2a6df)
-
-    const isWhitespace = code === 32 || code === 9 || code === 10 || code === 13
-
-    if (isCJK) {
-      if (bufferStart !== -1) {
-        tokens.push(lower.slice(bufferStart, bufferEnd))
-        bufferStart = -1
-      }
-      tokens.push(char)
-    } else if (isWhitespace) {
-      if (bufferStart !== -1) {
-        tokens.push(lower.slice(bufferStart, bufferEnd))
-        bufferStart = -1
-      }
-    } else {
-      if (bufferStart === -1) bufferStart = i
-      bufferEnd = i + char.length
-    }
-
-    i += char.length
-  }
-
-  if (bufferStart !== -1) {
-    tokens.push(lower.slice(bufferStart))
-  }
-
-  return tokens
-}
 
 let index = new FlexSearch.Document<Item>({
   encode: encoder,
@@ -130,14 +88,15 @@ function highlight(searchTerm: string, text: string, trim?: boolean) {
 
   const slice = tokenizedText
     .map((tok) => {
+      const safeTok = escapeHTML(tok)
       // see if this tok is prefixed by any search terms
       for (const searchTok of tokenizedTerms) {
         if (tok.toLowerCase().includes(searchTok.toLowerCase())) {
-          const regex = new RegExp(searchTok.toLowerCase(), "gi")
-          return tok.replace(regex, `<span class="highlight">$&</span>`)
+          const regex = new RegExp(escapeRegex(escapeHTML(searchTok.toLowerCase())), "gi")
+          return safeTok.replace(regex, `<span class="highlight">$&</span>`)
         }
       }
-      return tok
+      return safeTok
     })
     .join(" ")
 
@@ -161,7 +120,7 @@ function highlightHTML(searchTerm: string, el: HTMLElement) {
   const highlightTextNodes = (node: Node, term: string) => {
     if (node.nodeType === Node.TEXT_NODE) {
       const nodeText = node.nodeValue ?? ""
-      const regex = new RegExp(term.toLowerCase(), "gi")
+      const regex = new RegExp(escapeRegex(term.toLowerCase()), "gi")
       const matches = nodeText.match(regex)
       if (!matches || matches.length === 0) return
       const spanContainer = document.createElement("span")
@@ -312,7 +271,10 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
     return {
       id,
       slug,
-      title: searchType === "tags" ? data[slug].title : highlight(term, data[slug].title ?? ""),
+      title:
+        searchType === "tags"
+          ? escapeHTML(data[slug].title)
+          : highlight(term, data[slug].title ?? ""),
       content: highlight(term, data[slug].content ?? "", true),
       tags: highlightTags(term.substring(1), data[slug].tags),
     }
@@ -325,10 +287,11 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
 
     return tags
       .map((tag) => {
+        const safeTag = escapeHTML(tag)
         if (tag.toLowerCase().includes(term.toLowerCase())) {
-          return `<li><p class="match-tag">#${tag}</p></li>`
+          return `<li><p class="match-tag">#${safeTag}</p></li>`
         } else {
-          return `<li><p>#${tag}</p></li>`
+          return `<li><p>#${safeTag}</p></li>`
         }
       })
       .slice(0, numTagResults)
