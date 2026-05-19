@@ -33,6 +33,9 @@ export default (() => {
     const path = url.pathname as FullSlug
     const baseDir = fileData.slug === "404" ? path : pathToRoot(fileData.slug!)
     const iconPath = joinSegments(baseDir, "static/icon.png")
+    const icon192Path = joinSegments(baseDir, "static/icon-192.png")
+    const icon512Path = joinSegments(baseDir, "static/icon-512.png")
+    const appleTouchIconPath = joinSegments(baseDir, "static/apple-touch-icon.png")
     const manifestPath = joinSegments(baseDir, "static/manifest.json")
 
     // Fix homepage url: Quartz appends "/index"; canonical should be "/" for homepage.
@@ -77,8 +80,12 @@ export default (() => {
         />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content={THEME_COLOR_DARK} />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-title" content={cfg.pageTitle} />
-        <link rel="apple-touch-icon" href={iconPath} />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <link rel="apple-touch-icon" sizes="180x180" href={appleTouchIconPath} />
+        <link rel="icon" type="image/png" sizes="192x192" href={icon192Path} />
+        <link rel="icon" type="image/png" sizes="512x512" href={icon512Path} />
 
         <meta property="og:site_name" content={cfg.pageTitle} />
         <meta property="og:title" content={title} />
