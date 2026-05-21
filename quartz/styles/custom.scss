@@ -373,6 +373,27 @@ article img {
     z-index: 1001 !important;
   }
 
+  .mobile-no-scroll .sidebar.left {
+    &::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto 0;
+      height: 3.75rem;
+      background-color: var(--light);
+      border-bottom: 1px solid var(--lightgray);
+      z-index: 1001;
+    }
+
+    > .flex-component {
+      position: relative;
+      z-index: 1002;
+    }
+
+    .mobile-explorer {
+      z-index: 1002 !important;
+    }
+  }
+
   .mobile-toc {
     width: 100% !important;
     max-width: none !important;
