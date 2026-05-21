@@ -16,7 +16,9 @@
     .sidebar.left:has(.explorer) {
       box-sizing: border-box;
       position: sticky;
+      z-index: 1000;
       background-color: var(--light);
+      overflow: visible;
       padding: 1rem 0 1rem 0;
       margin: 0;
     }
@@ -261,7 +263,7 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
     .explorer-content {
       box-sizing: border-box;
       z-index: 100;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       margin-top: 0;
@@ -282,6 +284,7 @@ li:has(> .folder-outer:not(.open)) > .folder-container > svg {
     .mobile-explorer {
       margin: 0;
       padding: 5px;
+      position: relative;
       z-index: 101;
 
       .lucide-menu {

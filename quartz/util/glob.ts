@@ -15,7 +15,9 @@ export async function glob(
     await globby(pattern, {
       cwd,
       ignore: ignorePatterns,
-      gitignore: true,
+      // content/ is ignored by this repo because CI populates it at build time.
+      // Quartz's configured ignorePatterns are the source of truth for published files.
+      gitignore: false,
     })
   ).map(toPosixPath)
   return fps as FilePath[]
