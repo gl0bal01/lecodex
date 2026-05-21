@@ -316,6 +316,16 @@ article img {
 
 /* --- Mobile sidebar layout: title row + full-width search row --- */
 @media all and (max-width: 800px) {
+  #quartz-body,
+  .center,
+  .page-header,
+  .page-header > .popover-hint {
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+
   .sidebar.left {
     flex-wrap: wrap !important;
     align-items: center !important;
@@ -361,5 +371,10 @@ article img {
   }
   .mobile-explorer {
     z-index: 1001 !important;
+  }
+
+  .mobile-toc {
+    width: 100% !important;
+    max-width: none !important;
   }
 }

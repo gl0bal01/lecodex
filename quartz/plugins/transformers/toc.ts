@@ -24,6 +24,35 @@ interface TocEntry {
   slug: string // this is just the anchor (#some-slug), not the canonical slug
 }
 
+function normalizeHeading(value: unknown): string {
+  return String(value ?? "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase()
+}
+
+function isFrontmatterNode(node: Root["children"][number]): boolean {
+  const type = node.type as string
+  return type === "yaml" || type === "toml"
+}
+
+function removeLeadingDuplicateTitle(tree: Root, title: unknown) {
+  const normalizedTitle = normalizeHeading(title)
+  if (!normalizedTitle) return
+
+  const firstContentIndex = tree.children.findIndex((child) => !isFrontmatterNode(child))
+  if (firstContentIndex === -1) return
+
+  const firstContent = tree.children[firstContentIndex]
+  if (
+    firstContent.type === "heading" &&
+    firstContent.depth === 1 &&
+    normalizeHeading(toString(firstContent)) === normalizedTitle
+  ) {
+    tree.children.splice(firstContentIndex, 1)
+  }
+}
+
 const slugAnchor = new Slugger()
 export const TableOfContents: QuartzTransformerPlugin<Partial<Options>> = (userOpts) => {
   const opts = { ...defaultOptions, ...userOpts }
@@ -33,6 +62,8 @@ export const TableOfContents: QuartzTransformerPlugin<Partial<Options>> = (userO
       return [
         () => {
           return async (tree: Root, file) => {
+            removeLeadingDuplicateTitle(tree, file.data.frontmatter?.title)
+
             const display = file.data.frontmatter?.enableToc ?? opts.showByDefault
             if (display) {
               slugAnchor.reset()

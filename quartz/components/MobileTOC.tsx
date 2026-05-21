@@ -72,6 +72,7 @@ MobileTOC.css = `
 .mobile-toc {
   display: none;
   width: 100%;
+  max-width: none;
   box-sizing: border-box;
   margin: 1rem 0 1.25rem;
   border: 1px solid var(--lightgray);
@@ -82,6 +83,9 @@ MobileTOC.css = `
 @media all and (max-width: 800px) {
   .mobile-toc.mobile-only {
     display: block;
+    inline-size: 100%;
+    align-self: stretch;
+    margin-inline: 0;
   }
 }
 .mobile-toc > summary {
@@ -133,7 +137,8 @@ MobileTOC.css = `
   color: var(--darkgray);
   background: none;
   padding: 0;
-  display: inline-block;
+  display: block;
+  width: 100%;
 }
 .mobile-toc-content li > a:hover {
   color: var(--secondary);
