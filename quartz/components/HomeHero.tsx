@@ -264,7 +264,9 @@ body[data-slug="index"] .article-title,
 body[data-slug="index"] .content-meta,
 body[data-slug="index"] .tags,
 body[data-slug="index"] .center > article,
-body[data-slug="index"] .center > hr {
+body[data-slug="index"] .center > hr,
+body[data-slug="index"] .toc,
+body[data-slug="index"] .mobile-toc {
   display: none !important;
 }
 body[data-slug="index"] .home-hero-root {
