@@ -11,6 +11,7 @@ import ContentMeta from "./ContentMeta"
 import Spacer from "./Spacer"
 import TableOfContents from "./TableOfContents"
 import MobileTOC from "./MobileTOC"
+import HomeHero from "./HomeHero"
 import Explorer from "./Explorer"
 import TagList from "./TagList"
 import Graph from "./Graph"
@@ -38,6 +39,7 @@ export {
   Spacer,
   TableOfContents,
   MobileTOC,
+  HomeHero,
   Explorer,
   TagList,
   Graph,
