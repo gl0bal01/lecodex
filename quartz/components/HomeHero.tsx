@@ -219,8 +219,10 @@ const HomeHero: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
             href={linkHref(from, c.slug, c.external)}
             {...(c.external ? { target: "_blank", rel: "noopener" } : {})}
           >
-            <span class="landing-card-icon">{c.icon}</span>
-            <h3>{c.title}</h3>
+            <div class="landing-card-head">
+              <span class="landing-card-icon">{c.icon}</span>
+              <h3>{c.title}</h3>
+            </div>
             <p>{c.desc}</p>
             <span class="landing-card-cta">{c.cta} →</span>
           </a>
@@ -412,14 +414,21 @@ body[data-slug="index"] .home-hero-root {
   box-shadow: 0 6px 20px color-mix(in srgb, var(--secondary) 15%, transparent);
 }
 .landing-card:hover::before { opacity: 1; }
-.landing-card-icon { font-size: 1.8rem; margin-bottom: 0.5rem; line-height: 1; }
-.landing-card > h3 {
+.landing-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.landing-card-icon { font-size: 1.6rem; line-height: 1; flex-shrink: 0; }
+.landing-card-head > h3 {
   font-size: 1.1rem;
   font-weight: 700;
-  margin: 0 0 0.4rem !important;
+  margin: 0 !important;
   border: none !important;
   padding: 0 !important;
   color: var(--dark);
+  line-height: 1.2;
 }
 .landing-card > p {
   font-size: 0.88rem;
