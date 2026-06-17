@@ -11,7 +11,7 @@ export default ((_opts?: Options) => {
     const year = new Date().getFullYear()
     return (
       <footer class={`${displayClass ?? ""} site-footer`}>
-        <div class="site-footer-grid">
+        <div class="site-footer-main">
           <div class="site-footer-brand">
             <div class="site-footer-mark">LE&nbsp;CODEX</div>
             <p class="site-footer-tagline">OSINT • Security • Forensics</p>
@@ -21,66 +21,15 @@ export default ((_opts?: Options) => {
             </p>
           </div>
 
-          <div class="site-footer-col">
-            <h4>Explore</h4>
-            <ul>
-              <li>
-                <a href="/Investigations/">Investigations</a>
-              </li>
-              <li>
-                <a href="/Security/">Security &amp; Pentesting</a>
-              </li>
-              <li>
-                <a href="/CTF/">CTF</a>
-              </li>
-              <li>
-                <a href="/Cases/">Cases</a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="site-footer-col">
-            <h4>Resources</h4>
-            <ul>
-              <li>
-                <a href="/index.xml">RSS feed</a>
-              </li>
-              <li>
-                <a href="/sitemap.xml">Sitemap</a>
-              </li>
-              <li>
-                <a href="https://github.com/gl0bal01/intel-codex" rel="noopener" target="_blank">
-                  Vault repo
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/gl0bal01/lecodex" rel="noopener" target="_blank">
-                  Site repo
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="site-footer-col">
-            <h4>About</h4>
-            <ul>
-              <li>
-                <a href="https://gl0bal01.com/links" rel="noopener" target="_blank">
-                  All my links
-                </a>
-              </li>
-              <li>
-                <a href="https://gl0bal01.com" rel="noopener" target="_blank">
-                  gl0bal01.com
-                </a>
-              </li>
-              <li>
-                <a href="https://github.com/gl0bal01" rel="noopener" target="_blank">
-                  GitHub
-                </a>
-              </li>
-            </ul>
-          </div>
+          <a
+            class="site-footer-cta"
+            href="https://gl0bal01.com/links"
+            rel="noopener"
+            target="_blank"
+          >
+            All my links
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
 
         <div class="site-footer-bottom">
