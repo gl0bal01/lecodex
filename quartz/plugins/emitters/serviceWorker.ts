@@ -78,18 +78,21 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches
-      .keys()
-      .then((keys) =>
-        Promise.all(
-          keys
-            .filter(
-              (k) =>
-                k.startsWith("lecodex-") && k !== HTML_CACHE && k !== ASSET_CACHE,
-            )
-            .map((k) => caches.delete(k)),
-        ),
-      ),
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(
+        keys
+          .filter(
+            (k) =>
+              k.startsWith("lecodex-") && k !== HTML_CACHE && k !== ASSET_CACHE,
+          )
+          .map((k) => caches.delete(k)),
+      );
+      // Claim controls on first install so the tab that triggered install
+      // comes under SW control without a reload. On updates the new SW waits
+      // behind the old one, so this only ever runs when it's safe.
+      await self.clients.claim();
+    })(),
   );
 });
 
