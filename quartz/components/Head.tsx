@@ -37,6 +37,7 @@ export default (() => {
     const icon512Path = joinSegments(baseDir, "static/icon-512.png")
     const appleTouchIconPath = joinSegments(baseDir, "static/apple-touch-icon.png")
     const manifestPath = joinSegments(baseDir, "static/manifest.json")
+    const swPath = joinSegments(baseDir, "sw.js")
 
     // Fix homepage url: Quartz appends "/index"; canonical should be "/" for homepage.
     const isHome = fileData.slug === "index"
@@ -123,6 +124,11 @@ export default (() => {
         <meta name="description" content={description} />
         <meta name="generator" content="Quartz" />
 
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register(${JSON.stringify(swPath)}).catch(function(){});});}`,
+          }}
+        />
         {css.map((resource) => CSSResourceToStyleElement(resource, true))}
         {js
           .filter((resource) => resource.loadTime === "beforeDOMReady")
