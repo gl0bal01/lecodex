@@ -10,6 +10,10 @@ private/
 .replit
 replit.nix
 
+# plugins installed at build time by `npm run install-plugins`
+.quartz/
+quartz/cli/tui/dist/
+
 # content is fetched at build time from gl0bal01/intel-codex
 content/*
 !content/.gitkeep

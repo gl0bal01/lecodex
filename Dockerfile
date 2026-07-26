@@ -1,10 +1,13 @@
 FROM node:22-slim AS builder
 WORKDIR /app
 
+# git is needed both for content dates and for cloning Quartz v5 plugins
 RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json* ./
-RUN npm ci
+COPY quartz/ ./quartz/
+COPY quartz.lock.json ./
+RUN npm ci && npx quartz plugin install
 
 COPY . .
 
