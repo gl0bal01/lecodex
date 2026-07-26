@@ -68,7 +68,7 @@ footer.site-footer {
   padding: 0.7rem 1.25rem;
   border-radius: 999px;
   background: var(--secondary);
-  color: #fff !important;
+  color: var(--light) !important;
   font-weight: 600;
   font-size: 0.92rem;
   text-decoration: none !important;
@@ -83,7 +83,7 @@ footer.site-footer {
 
   &:hover {
     background: color-mix(in srgb, var(--secondary) 85%, black);
-    color: #fff !important;
+    color: var(--light) !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px color-mix(in srgb, var(--secondary) 30%, transparent);
 

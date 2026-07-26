@@ -9,8 +9,8 @@ import { CustomOgImagesEmitterName } from "../plugins/emitters/ogImage"
 // lecodex SEO additions: canonical, manifest, theme-color, twitter:site/creator,
 // og:url fix for homepage, og:image:type fix.
 const TWITTER_HANDLE = "@gl0bal01"
-const THEME_COLOR_LIGHT = "#faf8f8"
-const THEME_COLOR_DARK = "#0f0f10"
+const THEME_COLOR_LIGHT = "#f7fafc"
+const THEME_COLOR_DARK = "#07090f"
 
 export default (() => {
   const Head: QuartzComponent = ({

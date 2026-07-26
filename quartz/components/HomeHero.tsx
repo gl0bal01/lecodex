@@ -278,9 +278,11 @@ body[data-slug="index"] .home-hero-root {
   padding: 3rem 1rem 2.5rem;
   margin: 0 0 2rem;
   border-radius: 14px;
+  /* Cosmic ground stays dark in both modes — accent cyan is too light to sit under white text. */
   background:
-    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--tertiary) 18%, transparent), transparent 65%),
-    linear-gradient(135deg, var(--secondary), color-mix(in srgb, var(--secondary) 50%, black));
+    radial-gradient(circle at 50% 30%, rgba(102, 217, 255, 0.18), transparent 65%),
+    linear-gradient(135deg, #0d1326, #05060a);
+  border: 1px solid rgba(102, 217, 255, 0.16);
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -292,7 +294,7 @@ body[data-slug="index"] .home-hero-root {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, #c79a3a 50%, transparent);
+  background: linear-gradient(90deg, transparent, #66d9ff 50%, transparent);
   opacity: 0.7;
 }
 .landing-hero::before { top: 0; }
@@ -310,7 +312,7 @@ body[data-slug="index"] .home-hero-root {
   font-size: clamp(0.85rem, 2.2vw, 1.05rem);
   letter-spacing: 0.4em;
   margin: 0 auto 1rem;
-  color: #f0d8b8;
+  color: #cfe9ff;
   text-transform: uppercase;
   font-weight: 500;
   position: relative;
@@ -324,7 +326,7 @@ body[data-slug="index"] .home-hero-root {
   transform: translateX(-50%);
   width: 70px;
   height: 2px;
-  background: #c79a3a;
+  background: #66d9ff;
 }
 .landing-hero-sub {
   max-width: 36rem;
@@ -343,7 +345,7 @@ body[data-slug="index"] .home-hero-root {
   letter-spacing: 0.05em;
 }
 .landing-hero-stats strong {
-  color: #c79a3a;
+  color: #66d9ff;
   font-weight: 800;
   font-size: 1.1rem;
   margin-right: 0.35rem;
@@ -377,7 +379,7 @@ body[data-slug="index"] .home-hero-root {
 }
 .landing-pill:hover {
   background: var(--secondary);
-  color: #fff !important;
+  color: var(--light) !important;
   transform: translateY(-1px);
 }
 
