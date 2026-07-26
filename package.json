@@ -18,8 +18,9 @@
     "format": "npx prettier . --write",
     "test": "tsx --test",
     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1",
-    "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
-    "prebuild": "npm run install-plugins"
+    "install-plugins": "npx quartz plugin install && node scripts/fix-plugin-builds.mjs",
+    "prebuild": "npm run build-plugins && npm run install-plugins",
+    "build-plugins": "node scripts/build-local-plugins.mjs"
   },
   "engines": {
     "npm": ">=10.9.2",
@@ -108,6 +109,6 @@
     "esbuild": "^0.27.2",
     "prettier": "^3.8.1",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   }
 }

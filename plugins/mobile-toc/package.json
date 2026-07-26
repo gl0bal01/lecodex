@@ -1,0 +1,42 @@
+{
+  "name": "@lecodex/mobile-toc",
+  "version": "1.0.0",
+  "description": "Collapsible nested table of contents for mobile viewports.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "mobile-toc",
+    "displayName": "MobileTOC",
+    "description": "Nested, collapsible TOC shown only on mobile.",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [
+      "github:quartz-community/table-of-contents"
+    ],
+    "defaultOrder": 50,
+    "defaultEnabled": true,
+    "components": {
+      "MobileTOC": {
+        "displayName": "Mobile TOC",
+        "description": "Collapsible table of contents for small screens.",
+        "defaultPosition": "beforeBody",
+        "defaultPriority": 40
+      }
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-local-plugins.mjs"
+  }
+}

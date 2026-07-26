@@ -38,6 +38,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Quartz v5 keeps plugins outside the repo; type-checking needs them present.
+      - name: Build local plugins and install Quartz plugins
+        run: |
+          npm run build-plugins
+          npm run install-plugins
+
       - name: Check types and formatting
         run: npm run check
 

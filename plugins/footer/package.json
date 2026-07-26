@@ -1,0 +1,40 @@
+{
+  "name": "@lecodex/footer",
+  "version": "1.0.0",
+  "description": "Branded lecodex footer — brand block plus a single call to action.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "footer",
+    "displayName": "Footer",
+    "description": "Replaces the stock Quartz footer with the lecodex brand footer.",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 50,
+    "defaultEnabled": true,
+    "components": {
+      "Footer": {
+        "displayName": "Site Footer",
+        "description": "Brand block, tagline, and CTA.",
+        "defaultPosition": "footer",
+        "defaultPriority": 50
+      }
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-local-plugins.mjs"
+  }
+}

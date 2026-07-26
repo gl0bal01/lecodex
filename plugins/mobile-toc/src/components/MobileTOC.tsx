@@ -1,6 +1,10 @@
-import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
-import { classNames } from "../util/lang"
-import { i18n } from "../i18n"
+import type {
+  QuartzComponent,
+  QuartzComponentConstructor,
+  QuartzComponentProps,
+} from "@quartz-community/types"
+import { classNames } from "@quartz-community/utils"
+import { tocTitle } from "../i18n"
 
 type TocEntry = { slug: string; text: string; depth: number }
 type TocNode = { entry: TocEntry; children: TocNode[] }
@@ -46,7 +50,7 @@ const MobileTOC: QuartzComponent = ({ fileData, displayClass, cfg }: QuartzCompo
   return (
     <details class={classNames(displayClass, "mobile-toc")}>
       <summary>
-        <span class="mobile-toc-label">{i18n(cfg.locale).components.tableOfContents.title}</span>
+        <span class="mobile-toc-label">{tocTitle(cfg?.locale)}</span>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"

@@ -14,6 +14,11 @@ replit.nix
 .quartz/
 quartz/cli/tui/dist/
 
+# local plugin build output (`npm run build-plugins`)
+plugins/*/dist/
+plugins/*/node_modules/
+plugins/*/package-lock.json
+
 # content is fetched at build time from gl0bal01/intel-codex
 content/*
 !content/.gitkeep

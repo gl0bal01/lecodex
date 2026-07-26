@@ -1,6 +1,10 @@
-import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
-import { resolveRelative } from "../util/path"
-import { FullSlug } from "../util/path"
+import type {
+  QuartzComponent,
+  QuartzComponentConstructor,
+  QuartzComponentProps,
+} from "@quartz-community/types"
+import { resolveRelative } from "@quartz-community/utils"
+import type { FullSlug } from "@quartz-community/types"
 
 type CardLink = {
   icon: string
@@ -172,6 +176,12 @@ function linkHref(from: FullSlug, target: string, external?: boolean) {
 }
 
 const HomeHero: QuartzComponent = ({ fileData }: QuartzComponentProps) => {
+  // v5 layout conditions only ship a `not-index` predicate, so the hero gates
+  // itself rather than relying on a custom condition.
+  if (fileData.slug !== "index") {
+    return null
+  }
+
   const from = fileData.slug!
   return (
     <div class="home-hero-root">

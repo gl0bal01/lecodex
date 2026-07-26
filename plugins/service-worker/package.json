@@ -1,0 +1,29 @@
+{
+  "name": "@lecodex/service-worker",
+  "version": "1.0.0",
+  "description": "PWA offline support for lecodex — precached shell, network-first HTML, cache-first assets.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "service-worker",
+    "displayName": "ServiceWorker",
+    "description": "Emits sw.js with a content-hashed cache version.",
+    "category": "emitter",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 90,
+    "defaultEnabled": true
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-local-plugins.mjs"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "@lecodex/home-hero",
+  "version": "1.0.0",
+  "description": "Branded lecodex landing hero — wordmark, quickstart pills, section cards.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "home-hero",
+    "displayName": "HomeHero",
+    "description": "Landing page hero, rendered only on the homepage.",
+    "category": "component",
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [],
+    "defaultOrder": 50,
+    "defaultEnabled": true,
+    "components": {
+      "HomeHero": {
+        "displayName": "Home Hero",
+        "description": "Branded homepage hero with quickstart links and section cards.",
+        "defaultPosition": "beforeBody",
+        "defaultPriority": 8
+      }
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-local-plugins.mjs"
+  }
+}

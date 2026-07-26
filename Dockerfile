@@ -6,8 +6,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /
 
 COPY package.json package-lock.json* ./
 COPY quartz/ ./quartz/
-COPY quartz.lock.json ./
-RUN npm ci && npx quartz plugin install
+COPY plugins/ ./plugins/
+COPY scripts/ ./scripts/
+COPY quartz.lock.json quartz.config.yaml ./
+# Local plugins must be built before install symlinks them into .quartz/plugins
+RUN npm ci && npm run build-plugins && npx quartz plugin install
 
 COPY . .
 

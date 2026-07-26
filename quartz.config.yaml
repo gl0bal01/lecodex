@@ -1,0 +1,205 @@
+# yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
+configuration:
+  pageTitle: Le Codex
+  pageTitleSuffix: ""
+  enableSPA: true
+  enablePopovers: true
+  locale: en-US
+  baseUrl: lecodex.xyz
+  ignorePatterns:
+    - private
+    - templates
+    - .obsidian
+    - .github
+    - .claude
+    - .omc
+    - Case-Template
+    - Student-Exercises
+    - CLAUDE.md
+    - CONTRIBUTING.md
+  defaultDateType: modified
+  theme:
+    fontOrigin: googleFonts
+    cdnCaching: true
+    typography:
+      header: Schibsted Grotesk
+      body: Source Sans Pro
+      code: JetBrains Mono
+    # Brand palette mirrors gl0bal01.com/links: deep navy ground, cyan accent.
+    colors:
+      lightMode:
+        light: "#f7fafc"
+        lightgray: "#dfe7f0"
+        gray: "#8494ad"
+        darkgray: "#3b4a63"
+        dark: "#0d1326"
+        secondary: "#0b7ea8"
+        tertiary: "#1aa3c9"
+        highlight: rgba(102, 217, 255, 0.14)
+        textHighlight: "#66d9ff66"
+      darkMode:
+        light: "#07090f"
+        lightgray: "#1c2438"
+        gray: "#6c7a99"
+        darkgray: "#b8c4dc"
+        dark: "#e6edf7"
+        secondary: "#66d9ff"
+        tertiary: "#cfe9ff"
+        highlight: rgba(102, 217, 255, 0.10)
+        textHighlight: "#66d9ff44"
+plugins:
+  # --- transformers ---
+  - source: github:quartz-community/note-properties
+    enabled: true
+    order: 5
+  - source: github:quartz-community/created-modified-date
+    enabled: true
+    options:
+      priority:
+        - frontmatter
+        - git
+        - filesystem
+    order: 10
+  - source: github:quartz-community/syntax-highlighting
+    enabled: true
+    options:
+      theme:
+        light: github-light
+        dark: github-dark
+      keepBackground: false
+    order: 20
+  - source: github:quartz-community/obsidian-flavored-markdown
+    enabled: true
+    options:
+      enableInHtmlEmbed: false
+    order: 30
+  - source: github:quartz-community/github-flavored-markdown
+    enabled: true
+    order: 40
+  - source: github:quartz-community/crawl-links
+    enabled: true
+    options:
+      markdownLinkResolution: shortest
+    order: 60
+  - source: github:quartz-community/description
+    enabled: true
+    order: 70
+  - source: github:quartz-community/latex
+    enabled: true
+    options:
+      renderEngine: katex
+    order: 80
+
+  # --- filters ---
+  - source: github:quartz-community/remove-draft
+    enabled: true
+
+  # --- emitters ---
+  - source: github:quartz-community/alias-redirects
+    enabled: true
+  - source: github:quartz-community/content-index
+    enabled: true
+    options:
+      enableSiteMap: true
+      enableRSS: true
+      rssLimit: 50
+      rssFullHtml: false
+  - source: github:quartz-community/favicon
+    enabled: true
+  # Installed but disabled: Head.tsx imports its emitter name, and the static
+  # brand card at static/og-image.png is used instead of per-page images.
+  - source: github:quartz-community/og-image
+    enabled: false
+  - source: github:quartz-community/content-page
+    enabled: true
+  - source: github:quartz-community/folder-page
+    enabled: true
+  - source: github:quartz-community/tag-page
+    enabled: true
+  - source: ./plugins/service-worker
+    enabled: true
+    order: 90
+
+  # --- layout components ---
+  - source: github:quartz-community/page-title
+    enabled: true
+    layout:
+      position: left
+      priority: 10
+  - source: github:quartz-community/search
+    enabled: true
+    layout:
+      position: left
+      priority: 20
+      group: toolbar
+      groupOptions:
+        grow: true
+  - source: github:quartz-community/darkmode
+    enabled: true
+    layout:
+      position: left
+      priority: 30
+      group: toolbar
+  - source: github:quartz-community/reader-mode
+    enabled: true
+    layout:
+      position: left
+      priority: 35
+      group: toolbar
+      display: desktop-only
+  - source: github:quartz-community/explorer
+    enabled: true
+    layout:
+      position: left
+      priority: 50
+  - source: github:quartz-community/graph
+    enabled: true
+    layout:
+      position: right
+      priority: 10
+  - source: github:quartz-community/table-of-contents
+    enabled: true
+    order: 50
+    layout:
+      position: right
+      priority: 20
+      display: desktop-only
+  - source: github:quartz-community/backlinks
+    enabled: true
+    layout:
+      position: right
+      priority: 30
+  - source: github:quartz-community/breadcrumbs
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 5
+      condition: not-index
+  - source: ./plugins/home-hero
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 8
+  - source: github:quartz-community/article-title
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 10
+  - source: github:quartz-community/content-meta
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 20
+  - source: github:quartz-community/tag-list
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 30
+  - source: ./plugins/mobile-toc
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 40
+      display: mobile-only
+  - source: ./plugins/footer
+    enabled: true

@@ -1,9 +1,24 @@
 import crypto from "crypto"
 import fs from "fs"
-import { FullSlug, QUARTZ, joinSegments } from "../../util/path"
-import { QuartzEmitterPlugin } from "../types"
-import { write } from "./helpers"
-import { BuildCtx } from "../../util/ctx"
+import path from "path"
+import { joinSegments } from "@quartz-community/types"
+import type { FilePath, QuartzEmitterPlugin } from "@quartz-community/types"
+
+// Quartz's own static dir, relative to the site root the build runs from.
+const QUARTZ_STATIC = joinSegments("quartz", "static")
+
+// v5 emitters live outside core, so they carry their own write helper.
+async function write(
+  outputDir: string,
+  slug: string,
+  ext: string,
+  content: string,
+): Promise<FilePath> {
+  const pathToPage = path.join(outputDir, slug + ext)
+  await fs.promises.mkdir(path.dirname(pathToPage), { recursive: true })
+  await fs.promises.writeFile(pathToPage, content)
+  return pathToPage as FilePath
+}
 
 // PWA offline support. Precache a minimal shell, serve navigations (including
 // micromorph SPA fetches) network-first with cache fallback, and hashed assets
@@ -153,17 +168,14 @@ export const ServiceWorker: QuartzEmitterPlugin = () => ({
   async *emit({ argv }) {
     const hash = crypto.createHash("sha256").update(SW_TEMPLATE(""))
     for (const name of SHELL_ASSET_FILES) {
-      const bytes = await fs.promises.readFile(joinSegments(QUARTZ, "static", name))
+      const bytes = await fs.promises.readFile(joinSegments(QUARTZ_STATIC, name))
       hash.update(bytes)
     }
     const contentHash = hash.digest("hex").slice(0, 12)
     const version = process.env.LECODEX_SW_VERSION || contentHash
-    yield write({
-      ctx: { argv } as BuildCtx,
-      slug: "sw" as FullSlug,
-      ext: ".js",
-      content: SW_TEMPLATE(version),
-    })
+    yield await write(argv.output, "sw", ".js", SW_TEMPLATE(version))
   },
   async *partialEmit() {},
 })
+
+export default ServiceWorker
