@@ -60,8 +60,9 @@ jobs:
 
       - name: Clean non-content paths from vault checkout
         run: |
-          # .git must be removed so it doesn't ship in the image; fail loudly if it can't.
-          rm -rf content/.git
+          # content/.git is deliberately kept: CreatedModifiedDate reads real commit
+          # dates from it during the build. It never reaches the runtime image, which
+          # only copies public/ out of the discarded builder stage.
           # Optional cleanups — || true for paths that may not exist in every vault.
           rm -rf content/.github content/.claude content/.omc content/.obsidian \
                  content/README.md content/CONTRIBUTING.md content/LICENSE content/CLAUDE.md \

@@ -19,6 +19,7 @@ plugins/*/dist/
 plugins/*/node_modules/
 plugins/*/package-lock.json
 
-# content is fetched at build time from gl0bal01/intel-codex
-content/*
-!content/.gitkeep
+# content is fetched at build time from gl0bal01/intel-codex.
+# Ignore the directory itself, not just its contents: locally it is a clone of
+# that repo, and `git add -A` would otherwise stage it as a submodule gitlink.
+/content/

@@ -13,3 +13,8 @@ README.md
 plugins/*/dist
 .omc
 *.tsbuildinfo
+
+# Vault history is needed at build time so CreatedModifiedDate can read real
+# commit dates; it never reaches the runtime image, which only copies public/.
+!content/.git
+!content/.git/**
