@@ -1,7 +1,7 @@
 node_modules
 public
 .quartz-cache
-.git
+**/.git
 .github
 docs
 prof
@@ -11,3 +11,5 @@ README.md
 .quartz
 **/node_modules
 plugins/*/dist
+.omc
+*.tsbuildinfo
