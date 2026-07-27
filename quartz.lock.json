@@ -87,7 +87,7 @@
     },
     "footer": {
       "source": "./plugins/footer",
-      "resolved": "/home/dev/projects/lecodex/plugins/footer",
+      "resolved": "./plugins/footer",
       "commit": "local",
       "installedAt": "2026-07-26T13:48:42.179Z"
     },
@@ -105,7 +105,7 @@
     },
     "home-hero": {
       "source": "./plugins/home-hero",
-      "resolved": "/home/dev/projects/lecodex/plugins/home-hero",
+      "resolved": "./plugins/home-hero",
       "commit": "local",
       "installedAt": "2026-07-26T13:48:42.179Z"
     },
@@ -117,7 +117,7 @@
     },
     "mobile-toc": {
       "source": "./plugins/mobile-toc",
-      "resolved": "/home/dev/projects/lecodex/plugins/mobile-toc",
+      "resolved": "./plugins/mobile-toc",
       "commit": "local",
       "installedAt": "2026-07-26T13:48:42.179Z"
     },
@@ -132,12 +132,6 @@
       "resolved": "https://github.com/quartz-community/obsidian-flavored-markdown.git",
       "commit": "eda74e79eac746445b7d6941f90133bf97483cd7",
       "installedAt": "2026-03-12T19:33:36.619Z"
-    },
-    "og-image": {
-      "source": "github:quartz-community/og-image",
-      "resolved": "https://github.com/quartz-community/og-image.git",
-      "commit": "ab1f8e5ddcd3d9e9c55ea9f8f4163ae34cabe6ce",
-      "installedAt": "2026-03-11T18:22:46.168Z"
     },
     "page-title": {
       "source": "github:quartz-community/page-title",
@@ -165,7 +159,7 @@
     },
     "service-worker": {
       "source": "./plugins/service-worker",
-      "resolved": "/home/dev/projects/lecodex/plugins/service-worker",
+      "resolved": "./plugins/service-worker",
       "commit": "local",
       "installedAt": "2026-07-26T13:48:42.178Z"
     },

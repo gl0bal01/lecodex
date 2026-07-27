@@ -8,3 +8,6 @@ prof
 *.log
 .DS_Store
 README.md
+.quartz
+**/node_modules
+plugins/*/dist

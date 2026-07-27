@@ -4,10 +4,14 @@ import { CSSResourceToStyleElement, JSResourceToScriptElement } from "../util/re
 import { googleFontHref, googleFontSubsetHref } from "../util/theme"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { unescapeHTML } from "../util/escape"
-import { CustomOgImagesEmitterName } from "../../.quartz/plugins"
-
 // lecodex SEO additions: canonical, manifest, theme-color, twitter:site/creator,
 // og:url fix for homepage, og:image:type fix.
+//
+// The emitter name is inlined rather than imported from the og-image plugin: the
+// site serves one static brand card, so that plugin is not installed, and
+// importing from the generated .quartz/plugins barrel would make the whole
+// config fail to parse whenever it is absent.
+const CUSTOM_OG_IMAGES_EMITTER = "CustomOgImages"
 const TWITTER_HANDLE = "@gl0bal01"
 const THEME_COLOR_LIGHT = "#f7fafc"
 const THEME_COLOR_DARK = "#07090f"
@@ -49,7 +53,7 @@ export default (() => {
     const canonicalUrl = socialUrl.endsWith("/") ? socialUrl : socialUrl + "/"
 
     const usesCustomOgImage = ctx.cfg.plugins.emitters.some(
-      (e) => e.name === CustomOgImagesEmitterName,
+      (e) => e.name === CUSTOM_OG_IMAGES_EMITTER,
     )
     const ogImageDefaultPath = `https://${cfg.baseUrl}/static/og-image.png`
     const robotsContent = fileData.frontmatter?.noindex ? "noindex, nofollow" : "index, follow"

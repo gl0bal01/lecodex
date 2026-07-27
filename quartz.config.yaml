@@ -106,10 +106,6 @@ plugins:
       rssFullHtml: false
   - source: github:quartz-community/favicon
     enabled: true
-  # Installed but disabled: Head.tsx imports its emitter name, and the static
-  # brand card at static/og-image.png is used instead of per-page images.
-  - source: github:quartz-community/og-image
-    enabled: false
   - source: github:quartz-community/content-page
     enabled: true
   - source: github:quartz-community/folder-page

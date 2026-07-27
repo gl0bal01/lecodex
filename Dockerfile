@@ -1,16 +1,21 @@
 FROM node:22-slim AS builder
 WORKDIR /app
 
-# git is needed both for content dates and for cloning Quartz v5 plugins
-RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+# git is needed for content dates and for cloning Quartz v5 plugins; slim has no
+# CA bundle, and without it every plugin clone fails TLS verification (npm is
+# unaffected because Node ships its own CA store)
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY package.json package-lock.json* ./
 COPY quartz/ ./quartz/
 COPY plugins/ ./plugins/
 COPY scripts/ ./scripts/
 COPY quartz.lock.json quartz.config.yaml ./
-# Local plugins must be built before install symlinks them into .quartz/plugins
-RUN npm ci && npm run build-plugins && npx quartz plugin install
+# Local plugins must be built before install symlinks them into .quartz/plugins.
+# install-plugins also runs the repair pass for community plugins that cannot
+# build themselves in a clean environment.
+RUN npm ci && npm run build-plugins && npm run install-plugins
 
 COPY . .
 
@@ -22,6 +27,16 @@ RUN ./scripts/normalize-content.sh && \
     printf 'gl0bal01 / Le Codex — https://lecodex.xyz\n' > public/humans.txt && \
     LD='<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Le Codex","url":"https://lecodex.xyz","description":"OSINT investigation techniques, security procedures, real-world case studies.","inLanguage":"en-US","publisher":{"@type":"Person","name":"gl0bal01","url":"https://gl0bal01.com"},"potentialAction":{"@type":"SearchAction","target":"https://lecodex.xyz/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>' && \
     find public -type f -name '*.html' -print0 | xargs -0 sed -i "s|</head>|${LD}</head>|"
+
+# `quartz build` exits 0 even when plugins fail to load, which produces a nearly
+# empty site. Fail the image build instead of shipping one.
+RUN pages=$(find public -name '*.html' | wc -l) && \
+    echo "emitted $pages html pages" && \
+    [ "$pages" -ge 60 ] || { echo "FATAL: only $pages pages emitted — plugins likely failed to load"; exit 1; } && \
+    for marker in landing-hero site-footer-mark mobile-toc explorer search-bar; do \
+      grep -q "$marker" public/index.html || { echo "FATAL: homepage missing $marker"; exit 1; }; \
+    done && \
+    test -s public/sw.js || { echo "FATAL: service worker not emitted"; exit 1; }
 
 FROM nginx:1.27-alpine AS runtime
 RUN rm -rf /usr/share/nginx/html/*

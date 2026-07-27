@@ -4,7 +4,7 @@
 // Quartz loads plugins by dynamically importing their entry point at build
 // time, so local plugins have to ship real JS — the same shape the
 // quartz-community packages publish (dist/index.js + dist/components/index.js).
-import { readdirSync, existsSync, statSync } from "node:fs"
+import { readdirSync, existsSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { dirname, join } from "node:path"
 import esbuild from "esbuild"
@@ -47,6 +47,32 @@ const plugins = readdirSync(pluginsDir).filter((name) =>
   statSync(join(pluginsDir, name)).isDirectory(),
 )
 
+// `quartz plugin install` symlinks local plugins using the lockfile's `resolved`
+// path verbatim, and it records an absolute one. That path is wrong anywhere the
+// repo lives elsewhere — notably /app inside the Docker image — so rewrite the
+// local entries for the current checkout before installing.
+function normalizeLockfileLocalPaths() {
+  const lockPath = join(__dirname, "..", "quartz.lock.json")
+  if (!existsSync(lockPath)) return
+
+  const lock = JSON.parse(readFileSync(lockPath, "utf8"))
+  let changed = false
+
+  for (const [name, entry] of Object.entries(lock.plugins ?? {})) {
+    if (entry.commit !== "local") continue
+    const absolute = join(pluginsDir, name)
+    if (entry.resolved !== absolute) {
+      entry.resolved = absolute
+      changed = true
+    }
+  }
+
+  if (changed) {
+    writeFileSync(lockPath, JSON.stringify(lock, null, 2) + "\n")
+    console.log("normalized local plugin paths in quartz.lock.json")
+  }
+}
+
 for (const name of plugins) {
   const root = join(pluginsDir, name)
   const entryPoints = {}
@@ -75,3 +101,5 @@ for (const name of plugins) {
   })
   console.log(`built plugin ${name}`)
 }
+
+normalizeLockfileLocalPaths()
