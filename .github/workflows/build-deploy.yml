@@ -21,7 +21,10 @@ jobs:
     permissions:
       contents: read
       packages: write
-    timeout-minutes: 15
+    # A cold build installs ~31 Quartz plugins inside the image (git clone + npm
+    # install + tsup each), which takes ~15 min on its own. Warm builds hit the
+    # gha layer cache and finish in a couple of minutes.
+    timeout-minutes: 45
 
     steps:
       - name: Checkout lecodex
@@ -37,12 +40,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      # Quartz v5 keeps plugins outside the repo; type-checking needs them present.
-      - name: Build local plugins and install Quartz plugins
-        run: |
-          npm run build-plugins
-          npm run install-plugins
 
       - name: Check types and formatting
         run: npm run check

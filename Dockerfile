@@ -15,7 +15,8 @@ COPY quartz.lock.json quartz.config.yaml ./
 # Local plugins must be built before install symlinks them into .quartz/plugins.
 # install-plugins also runs the repair pass for community plugins that cannot
 # build themselves in a clean environment.
-RUN npm ci && npm run build-plugins && npm run install-plugins
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci && npm run build-plugins && npm run install-plugins
 
 COPY . .
 
