@@ -6,17 +6,21 @@ configuration:
   enablePopovers: true
   locale: en-US
   baseUrl: lecodex.xyz
+  # Matched with minimatch against the path relative to the content root, so a
+  # bare directory name never matches anything nested. These need the globs.
   ignorePatterns:
-    - private
-    - templates
-    - .obsidian
-    - .github
-    - .claude
-    - .omc
-    - Case-Template
-    - Student-Exercises
-    - CLAUDE.md
-    - CONTRIBUTING.md
+    - "**/private/**"
+    - "**/templates/**"
+    - "**/.obsidian/**"
+    - "**/.github/**"
+    - "**/.claude/**"
+    - "**/.omc/**"
+    - "**/Case-Template/**"
+    - "**/Student-Exercises/**"
+    - "**/CLAUDE.md"
+    - "**/CONTRIBUTING.md"
+    - "**/LICENSE"
+    - README.md
   defaultDateType: modified
   theme:
     fontOrigin: googleFonts

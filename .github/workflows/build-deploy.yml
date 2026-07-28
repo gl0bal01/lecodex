@@ -105,6 +105,29 @@ jobs:
           cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache,mode=max
           platforms: linux/amd64
 
+      # Publishing is not deploying. Watchtower pulls on its own schedule and can
+      # fail without saying so — it logged `failed=0 updated=0` for 26 days while
+      # every pull was rejected — so assert the running site actually serves this
+      # commit instead of assuming it does.
+      - name: Verify deployment went live
+        env:
+          EXPECTED_SHA: ${{ github.sha }}
+        run: |
+          deadline=$(( SECONDS + 600 ))
+          while [ "$SECONDS" -lt "$deadline" ]; do
+            live=$(curl -fsS --max-time 15 "https://lecodex.xyz/version.json?t=$(date +%s)" \
+                   | sed -n 's/.*"commit":"\([^"]*\)".*/\1/p') || live=""
+            if [ "$live" = "$EXPECTED_SHA" ]; then
+              echo "live commit: $live"
+              exit 0
+            fi
+            echo "waiting — live commit is '${live:-unreachable}', expected '$EXPECTED_SHA'"
+            sleep 30
+          done
+          echo "::error::lecodex.xyz still does not serve $EXPECTED_SHA after 10 minutes."
+          echo "::error::The image published fine, so this is the deploy step: check watchtower on the host."
+          exit 1
+
       - name: Summary
         env:
           IMAGE_TAGS: ${{ steps.meta.outputs.tags }}
