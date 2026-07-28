@@ -60,7 +60,17 @@ export default (() => {
       (e) => e.name === CUSTOM_OG_IMAGES_EMITTER,
     )
     const ogImageDefaultPath = `https://${cfg.baseUrl}/static/og-image.png`
-    const robotsContent = fileData.frontmatter?.noindex ? "noindex, nofollow" : "index, follow"
+    // Tag pages are auto-generated listings — 217 of them against 76 real
+    // documents — and carry no description of their own. Keep them crawlable so
+    // they still pass link equity to the documents they list, but out of the
+    // index. The /tags hub itself stays indexable.
+    const slug = fileData.slug ?? ""
+    const isTagListing = slug.startsWith("tags/") && slug !== "tags/index"
+    const robotsContent = fileData.frontmatter?.noindex
+      ? "noindex, nofollow"
+      : isTagListing
+        ? "noindex, follow"
+        : "index, follow"
 
     return (
       <head>
