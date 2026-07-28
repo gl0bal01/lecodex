@@ -63,7 +63,11 @@ RUN ./scripts/normalize-content.sh && \
     printf 'User-agent: *\nAllow: /\n\nSitemap: https://lecodex.xyz/sitemap.xml\n' > public/robots.txt && \
     printf 'gl0bal01 / Le Codex — https://lecodex.xyz\n' > public/humans.txt && \
     LD='<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Le Codex","url":"https://lecodex.xyz","description":"OSINT investigation techniques, security procedures, real-world case studies.","inLanguage":"en-US","publisher":{"@type":"Person","name":"gl0bal01","url":"https://gl0bal01.com"},"potentialAction":{"@type":"SearchAction","target":"https://lecodex.xyz/?q={search_term_string}","query-input":"required name=search_term_string"}}</script>' && \
-    find public -type f -name '*.html' -print0 | xargs -0 sed -i "s|</head>|${LD}</head>|"
+    find public -type f -name '*.html' -print0 | xargs -0 sed -i "s|</head>|${LD}</head>|" && \
+    # content-index lists folder pages with a trailing slash while the canonical
+    # (and the URL nginx serves) has none. Normalise so both agree; the site root
+    # keeps its slash because the pattern needs at least one path character.
+    sed -i 's|<loc>\(https://lecodex\.xyz/[^<]\+\)/</loc>|<loc>\1</loc>|g' public/sitemap.xml
 
 # --- verify: `quartz build` exits 0 even when plugins fail to load and emits a
 # near-empty site, so assert the result rather than trusting the exit code ---

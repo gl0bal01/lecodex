@@ -43,14 +43,18 @@ export default (() => {
     const manifestPath = joinSegments(baseDir, "static/manifest.json")
     const swPath = joinSegments(baseDir, "sw.js")
 
-    // Fix homepage url: Quartz appends "/index"; canonical should be "/" for homepage.
+    // The canonical URL has to be the URL nginx actually serves, otherwise it
+    // points at a 404 and search engines drop the page. Pages are served
+    // extensionless and without a trailing slash (`/CTF/CTF-Index`); folder and
+    // tag pages carry an "index" leaf in their slug that is not part of the URL
+    // (`Investigations/index` -> `/Investigations`). Only the site root keeps a
+    // trailing slash.
     const isHome = fileData.slug === "index"
-    const socialUrl = isHome
-      ? url.toString()
-      : fileData.slug === "404"
+    const canonicalPath = (fileData.slug ?? "").replace(/(^|\/)index$/, "")
+    const canonicalUrl =
+      isHome || fileData.slug === "404" || canonicalPath === ""
         ? url.toString()
-        : joinSegments(url.toString(), fileData.slug!)
-    const canonicalUrl = socialUrl.endsWith("/") ? socialUrl : socialUrl + "/"
+        : joinSegments(url.toString(), canonicalPath)
 
     const usesCustomOgImage = ctx.cfg.plugins.emitters.some(
       (e) => e.name === CUSTOM_OG_IMAGES_EMITTER,
