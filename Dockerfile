@@ -49,6 +49,13 @@ COPY . .
 COPY --from=plugins /app/.quartz ./.quartz
 COPY --from=plugins /app/plugins ./plugins
 
+# The service worker hashes its own template plus the precached shell assets, so
+# a CSS or script change alone would not change its cache version and installed
+# clients would keep serving the old asset cache forever. Tie the version to the
+# commit instead.
+ARG GIT_SHA=dev
+ENV LECODEX_SW_VERSION=${GIT_SHA}
+
 # content/ is expected to be populated by CI (actions/checkout of intel-codex into ./content)
 # Local builds can: git clone --depth=1 https://github.com/gl0bal01/intel-codex.git content
 RUN ./scripts/normalize-content.sh && \

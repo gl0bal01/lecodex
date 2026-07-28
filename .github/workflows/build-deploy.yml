@@ -95,6 +95,10 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # Gives the service worker a per-build cache version, so a CSS-only
+          # change still invalidates the caches of installed clients.
+          build-args: |
+            GIT_SHA=${{ github.sha }}
           # Registry cache instead of type=gha: the plugin stage is large and
           # GHA's 10 GB per-repo cap evicted it between runs.
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache
