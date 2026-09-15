@@ -36,9 +36,28 @@ const scssAsText = {
       contents: sass.compile(args.path, { loadPaths: sassLoadPaths }).css,
       loader: "text",
     }))
+    // Quartz core only transpiles afterDOMLoaded scripts, so anything the
+    // inline script imports (flexsearch, @quartz-community/utils) has to be
+    // bundled in here, the same way the community plugins' tsup config does.
     build.onLoad({ filter: /\.inline\.ts$/ }, async (args) => {
       const { promises: fs } = await import("node:fs")
-      return { contents: await fs.readFile(args.path, "utf8"), loader: "text" }
+      const text = (await fs.readFile(args.path, "utf8")).replace(/^export (default )?/gm, "")
+      const result = await esbuild.build({
+        stdin: {
+          contents: text,
+          loader: "ts",
+          resolveDir: dirname(args.path),
+          sourcefile: args.path,
+        },
+        write: false,
+        bundle: true,
+        minify: true,
+        platform: "browser",
+        format: "esm",
+        target: "es2020",
+        external: ["http://*", "https://*"],
+      })
+      return { contents: result.outputFiles[0].text, loader: "text" }
     })
   },
 }

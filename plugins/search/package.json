@@ -1,0 +1,46 @@
+{
+  "name": "@lecodex/search",
+  "version": "1.0.0",
+  "description": "DocSearch-style site search: hierarchy-weighted ranking (title > headings > content), no page preview.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./components": {
+      "import": "./dist/components/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "quartz": {
+    "name": "search",
+    "displayName": "Search",
+    "description": "Search modal with Algolia-style grouped results, plus the headings index it needs.",
+    "category": [
+      "component",
+      "emitter"
+    ],
+    "version": "1.0.0",
+    "quartzVersion": ">=5.0.0",
+    "dependencies": [
+      "github:quartz-community/content-index",
+      "github:quartz-community/table-of-contents"
+    ],
+    "defaultOrder": 50,
+    "defaultEnabled": true,
+    "components": {
+      "Search": {
+        "displayName": "Search",
+        "description": "Search button and modal.",
+        "defaultPosition": "left",
+        "defaultPriority": 20
+      }
+    }
+  },
+  "scripts": {
+    "build": "node ../../scripts/build-local-plugins.mjs"
+  }
+}
