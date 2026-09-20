@@ -84,7 +84,10 @@ RUN pages=$(find public -name '*.html' | wc -l) && \
     # cache.addAll and offline support dies with no visible error.
     for asset in static/manifest.json static/icon-192.png static/icon-512.png; do \
       test -s "public/$asset" || { echo "FATAL: precached asset $asset missing"; exit 1; }; \
-    done
+    done && \
+    # A link written for Obsidian or GitHub can be valid in the vault and still
+    # 404 here, so the only place the truth shows up is the emitted site.
+    node ./scripts/check-links.mjs
 
 FROM nginx:1.27-alpine-slim AS runtime
 RUN rm -rf /usr/share/nginx/html/*
