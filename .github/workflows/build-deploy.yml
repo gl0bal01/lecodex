@@ -24,7 +24,7 @@ jobs:
     # A cold build installs ~31 Quartz plugins inside the image (git clone + npm
     # install + tsup each), which takes ~15 min on its own. Warm builds hit the
     # gha layer cache and finish in a couple of minutes.
-    timeout-minutes: 60
+    timeout-minutes: 45
 
     steps:
       - name: Checkout lecodex
@@ -114,9 +114,7 @@ jobs:
         env:
           EXPECTED_SHA: ${{ github.sha }}
         run: |
-          # Watchtower polls on its own schedule; 10 minutes was shorter than one
-          # interval, so a deploy that worked still failed the assertion.
-          deadline=$(( SECONDS + 1800 ))
+          deadline=$(( SECONDS + 600 ))
           last=""
           while [ "$SECONDS" -lt "$deadline" ]; do
             code=$(curl -sS -o /tmp/version.json -w '%{http_code}' --max-time 15 \
@@ -134,7 +132,7 @@ jobs:
             echo "waiting — $last, expected $EXPECTED_SHA"
             sleep 30
           done
-          echo "::error::lecodex.xyz did not serve $EXPECTED_SHA within 30 minutes (last: $last)."
+          echo "::error::lecodex.xyz did not serve $EXPECTED_SHA within 10 minutes (last: $last)."
           echo "::error::The image published, so the failure is in the deploy: check watchtower on the host."
           exit 1
 
