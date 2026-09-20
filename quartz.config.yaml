@@ -21,6 +21,10 @@ configuration:
     - "**/CONTRIBUTING.md"
     - "**/LICENSE"
     - README.md
+    # Cases/README.md indexes Case-Template + Student-Exercises, both ignored above,
+    # and its links are file-relative while Quartz resolves the fallback from the
+    # content root. Publishing it emits guaranteed 404s.
+    - "**/Cases/README.md"
   defaultDateType: modified
   theme:
     fontOrigin: googleFonts
